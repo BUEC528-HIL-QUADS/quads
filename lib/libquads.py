@@ -3,8 +3,8 @@ import time
 import yaml
 import os
 import requests
-import logging
 import sys
+import logging
 import importlib
 from subprocess import check_call
 from hardware_services.hardware_service import get_hardware_service, set_hardware_service
@@ -557,11 +557,4 @@ class Quads(object):
                             ",cloud=" + self.quads.hosts.data[host]["schedule"][override]["cloud"]
             else:
                 print current_cloud
-
-    # add for EC528 HIL-QUADS integration project
-    def quads_rest_call(self, method, url, request, json_data=None):
-        r = requests.request(method, url + request, data=json_data)
-        if method == 'GET':
-            print r.text
-
 
