@@ -28,10 +28,8 @@ from CloudHistory import CloudHistory
 import urllib
 import json
 from subprocess import check_call
-from hardware_services.inventory_service import get_inventory_service, set_inventory_service
-from hardware_services.network_service import get_network_service, set_network_service
-sys.path.append(os.path.dirname(__file__) + "/hardware_services/inventory_drivers/")
-sys.path.append(os.path.dirname(__file__) + "/hardware_services/network_drivers/")
+from hardware_services.inventory_service import get_inventory_service
+from hardware_services.network_service import get_network_service
 
 
 class Quads(object):
@@ -47,21 +45,8 @@ class Quads(object):
         self.logger = logging.getLogger("quads.Quads")
         self.logger.setLevel(logging.DEBUG)
 
-        #EC528 addition - dynamically import driver module and set inventory and network services
-        inventoryservice = hardwareservice + "InventoryDriver"
-        networkservice = hardwareservice + "NetworkDriver"
-
-        importlib.import_module(inventoryservice)
-        importlib.import_module(networkservice)
-
-        set_inventory_service(getattr(sys.modules[inventoryservice], inventoryservice)())
-        set_network_service(getattr(sys.modules[networkservice], networkservice)())
-
-        self.inventory_service = get_inventory_service()
-        self.network_service = get_network_service()
-
-        self.hardware_service_url = hardwareserviceurl
-
+        self.inventory_service = get_inventory_service(hardwareservice, hardwarewserviceurl)
+        self.network_service = get_network_service(hardwareservice, hardwareserviceurl)
 
         self.inventory_service.load_data(self, force, initialize)
 
@@ -565,7 +550,3 @@ class Quads(object):
                             ",cloud=" + self.quads.hosts.data[host]["schedule"][override]["cloud"]
             else:
                 print current_cloud
-
-
-
-

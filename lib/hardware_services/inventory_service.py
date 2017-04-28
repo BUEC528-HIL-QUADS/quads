@@ -32,8 +32,18 @@
 # will be able to continue with minimal changes (only thing that this will change is where QUADS pulls its data from)
 #####################################################################################################################
 
-import sys
+import os, sys, importlib
 from abc import ABCMeta, abstractmethod
+
+
+sys.path.append(os.path.dirname(__file__) + "/hardware_services/inventory_drivers/")
+
+
+def get_inventory_serivce(name, url):
+    inventoryservice = name + "InventoryDriver"
+    importlib.import_module()
+    return getattr(sys.modules[inventoryservice], inventoryservice)(url)
+
 
 class InventoryService(object):
 
@@ -88,22 +98,3 @@ class InventoryService(object):
     def write_data(self, quads, doexit):
         """ TODO add documentation
         """
-
-
-_inventory_service = None
-
-
-def set_inventory_service(inventory_service):
-
-    global _inventory_service
-    if _inventory_service is not None:
-        sys.exit("Error: _inventory_service already set")
-
-    _inventory_service = inventory_service
-
-
-def get_inventory_service():
-    return _inventory_service
-
-
-

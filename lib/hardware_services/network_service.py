@@ -32,34 +32,25 @@
 # will be able to continue with minimal changes (only thing that this will change is where QUADS pulls its data from)
 #####################################################################################################################
 
-import sys
+import os, sys, importlib
 from abc import ABCMeta, abstractmethod
+
+
+sys.path.append(os.path.dirname(__file__) + "/hardware_services/network_drivers/")
+
+
+def get_network_service(name, url):
+    self.name = name
+    networkservice = name + "NetworkDriver"
+    importlib.import_module()
+    return getattr(sys.modules[networkservice], networkservice)(url)
+
 
 class NetworkService(object):
 
     __metaclass__ = ABCMeta
 
-
     @abstractmethod
     def move_hosts(self, **kwargs):
         """ TODO add documentation
         """
-
-
-_network_service = None
-
-
-def set_network_service(network_service):
-
-    global _network_service
-    if _network_service is not None:
-        sys.exit("Error: _network_service already set")
-
-    _network_service = network_service
-
-
-def get_network_service():
-    return _network_service
-
-
-
